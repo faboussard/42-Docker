@@ -1,0 +1,34 @@
+
+///////////////////////////////////////////////////////////////////////
+
+verif docker evaluation
+
+
+//////////////////////////////////////////////////////////////////////
+
+Vérifier que quand tu stop tes docker et que tu les relances tes données sont toujours présentes 
+
+Pour se faire :
+se log avec login.42.fr/wp-admin 
+(Soit retourné sur la page d’accueil et sur le poste, soit dans la page admin) écrire un commentaire sur un poste ou en créer un nouveau.
+Si quand tu redémarre le commentaire est encore là 
+Il te reste plus que 2 chose à vérifier :
+Si tu a bien 2 user wordpresss (un admin et un autre (ATTENTION PAS DE LOGIN+MDP FACILE))
+
+Et vérifier que tout tes mots de passe sont dans le .env que TU NE PUSH PAS et que tu ajoutera à la main à chaque correction
+Vérifie aussi si tu peux te connecter à ton docker mariadb (command docker exec) 
+normalement tu ne dois pas pouvoir te co en root sans mot passe (mysqld -h localhost -u root) si ca marche sans -p=$PASSWORD c’est pas bon
+(Pour le modifier je te laisse checker comment Alter Table un User ROOT) 
+
+///////////////////////////////////////////////////////////////////////
+
+Tips VM :
+passer en NAT plutot quen bridge
+ run alias wp="wp --allow-root"
+
+////////////////////////////////////////////////:
+lancer le docker:
+
+qller dqns le dosier de lappli
+lancer docker build . ou par ex docker build -t nginx.
+docker image ls
