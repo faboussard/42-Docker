@@ -27,8 +27,50 @@ passer en NAT plutot quen bridge
  run alias wp="wp --allow-root"
 
 ////////////////////////////////////////////////:
-lancer le docker:
+ GENERAL - docker:
+
+////////////////////////////////////////////////
 
 qller dqns le dosier de lappli
 lancer docker build . ou par ex docker build -t nginx.
 docker image ls
+
+
+L'option -it que vous avez utilisée signifie :
+-i : interactif
+-t : alloue un pseudo-TTY
+
+//////////////////////////////////////////////////
+DOCKERFILE nginx
+/////////////////////////////////////////////////////////
+
+   openssl req
+
+
+💡
+La commande req crée et traite principalement des demandes de certificats au format PKCS#10. Elle peut en outre créer des certificats auto-signés.
+
+RUN mkdir -p /etc/nginx/ssl -  dossier, qui permettra de stocker le certificat et la clef pour une connexion sécurisée
+
+
+OpenSSL:  l’outil principal pour la gestion/création de certificat SSL
+Nous rajouterons ensuite le mot clef -x509 pour préciser le type du certificat.
+
+-nodes : eviter la demande de mdp
+
+
+-out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key  :  indiquer à OpenSSL où l’on souhaite stocker le certificat et la clef de notre SSL en rajoutant les options -out et -keyout
+
+-subj eviter  d’avoir un prompt qui requiert certaines informations pour le certificat.
+
+   RUN mkdir -p /var/run/nginx :  créer un dossier qui nous permettra de stocker les fichiers de config de NGINX.
+
+
+   Fonctionnement
+Par défaut, Nginx s'exécute comme un démon, ce qui signifie qu'il fonctionne en arrière-plan.
+L'option "-g 'daemon off;'" force Nginx à rester au premier plan.
+Utilité dans Docker
+Cette configuration est particulièrement utile dans un environnement Docker pour plusieurs raisons :
+Visibilité des logs : En mode premier plan, Nginx affiche ses logs directement dans la console du conteneur, facilitant le débogage.
+Gestion des processus : Docker peut mieux surveiller et gérer le processus Nginx lorsqu'il est au premier plan.
+Arrêt propre : Cela permet à Docker d'envoyer correctement les signaux d'arrêt à Nginx lors de l'arrêt du conteneur.
