@@ -33,6 +33,7 @@ passer en NAT plutot quen bridge
 
 qller dqns le dosier de lappli
 lancer docker build . ou par ex docker build -t nginx.
+
 docker image ls
 
 
@@ -74,3 +75,15 @@ Cette configuration est particulièrement utile dans un environnement Docker pou
 Visibilité des logs : En mode premier plan, Nginx affiche ses logs directement dans la console du conteneur, facilitant le débogage.
 Gestion des processus : Docker peut mieux surveiller et gérer le processus Nginx lorsqu'il est au premier plan.
 Arrêt propre : Cela permet à Docker d'envoyer correctement les signaux d'arrêt à Nginx lors de l'arrêt du conteneur.
+
+//////////////////////////////////////////////////
+DOCKER COMPOSE
+/////////////////////////////////////////////////////////
+
+   docker-compose -f  <path_docker_compose>  -d —build =>  build le docker compose 
+   Pour l’arrêter :    docker-compose -f  <path_docker_compose>  stop
+   Pour supprimer le build :    docker-compose -f  <path_docker_compose>  down -v
+
+   Si vous rencontrez des problèmes avec docker vous pouvez utiliser la commande :
+
+   docker system prune -af
