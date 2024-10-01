@@ -1,4 +1,8 @@
 
+NGINX with TLSv1.2 or TLSv1.3 only =  config ssl(predecesseur de tsl) = > change les urls de http en https = securisation. 
+
+
+
 ///////////////////////////////////////////////////////////////////////
 
 verif docker evaluation
@@ -87,3 +91,59 @@ DOCKER COMPOSE
    Si vous rencontrez des problèmes avec docker vous pouvez utiliser la commande :
 
    docker system prune -af
+
+
+
+//////////////////////////////////////////////////
+EXPLICATION MAKEFILE
+/////////////////////////////////////////////////////////
+
+.PHONY: up
+up: $(WORDPRESS_VOLUME_PATH) $(MARIADB_VOLUME_PATH)
+	$(DOCKER_COMPOSE) up --build 
+   ==> Cette règle démarre les conteneurs en reconstruisant les images si nécessaire.
+
+
+   docker-compose down
+Cette commande :
+Arrête tous les conteneurs en cours d'exécution.
+Supprime les conteneurs arrêtés.
+Supprime les réseaux définis dans le fichier docker-compose.yml.
+Par défaut, elle préserve les volumes nommés définis dans le fichier docker-compose.yml1.
+docker-compose stop
+Cette commande :
+Arrête les conteneurs en cours d'exécution.
+Conserve les conteneurs arrêtés, les réseaux et les volumes1.
+
+
+
+//////////////////////////////////////////////////
+Fonctionnement
+/////////////////////////////////////////////////////////
+
+
+Les requêtes entrantes arrivent sur le port 443 de Nginx.
+Nginx transmet les requêtes PHP à WordPress sur le port 9000.
+WordPress traite la requête, en se connectant si nécessaire à MariaDB sur le port 3306.
+WordPress renvoie le résultat à Nginx.
+Nginx renvoie la réponse finale au client.
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+pourquoi utiliser un serveur proxy ? = un serveur situe devant un groupe dordinateurs clients  
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Pour éviter les restrictions de navigation imposées par l'État ou les institutions : certains gouvernements, écoles et autres organisations emploient des pare-feu pour offrir à leurs utilisateurs un accès à une version limitée d'Internet. Un proxy de transfert peut permettre de contourner ces restrictions, car l'utilisateur se connecte alors au proxy plutôt que directement aux sites visités.
+Pour bloquer l'accès à certains contenus : inversement, la mise en place d'un proxy peut également servir à empêcher un groupe d'utilisateurs d'accéder à certains sites. Un réseau scolaire peut, par exemple, être configuré pour se connecter au web par l'intermédiaire d'un proxy disposant de règles de filtrage de contenu chargées de refuser la transmission des réponses provenant de Facebook et d'autres sites de réseaux sociaux.
+Pour protéger son identité en ligne : dans certains cas, les internautes ordinaires souhaitent simplement profiter d'un anonymat accru en ligne, mais dans d'autres, les internautes considérés comme dissidents politiques par leur gouvernement peuvent s'exposer à de graves sanctions dans certains pays. La critique du gouvernement sur un forum web ou sur les réseaux sociaux peut entraîner des amendes ou des peines d'emprisonnement pour ces utilisateurs. Si l'un de ces dissidents passe par un proxy de transfert pour se connecter à un site web sur lequel il publie des commentaires politiquement sensibles, l'adresse IP utilisée pour publier ces commentaires sera plus difficile à remonter. En effet, seule l'adresse IP du serveur proxy sera visible.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+pourquoi utiliser un proxy inverse ? = un serveur situe devant un groupe de origin server  
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Équilibrage de charge : un site web populaire accueillant des millions d'utilisateurs chaque jour peut ne pas être en mesure de gérer l'ensemble du trafic entrant sur son site à l'aide d'un seul serveur d'origine. À la place, le site peut être réparti sur un ensemble de serveurs différents, tous dédiés au traitement des requêtes pour le même site. Dans ce cas, un proxy inverse peut constituer une solution d'équilibrage de charge permettant de distribuer le trafic entrant de manière égale entre les différents serveurs afin d'éviter la surcharge de l'un d'entre eux. En cas de défaillance complète d'un serveur, les autres serveurs peuvent prendre le relais pour gérer le trafic.
+Protection contre les attaques : avec un proxy inverse en place, un site ou un service web n'a jamais besoin de révéler l'adresse IP de son ou ses serveurs d'origine. Il est donc beaucoup plus difficile pour les pirates de lancer une attaque ciblée contre eux, comme une attaque DDoS. Les pirates ne pourront alors viser que le proxy inverse (comme le réseau CDN de Cloudflare), qui peut compter sur une sécurité plus stricte et davantage de ressources pour repousser une cyberattaque.
+Équilibrage de la charge des serveurs à l'échelle mondiale (Global Server Load Balancing, GSLB) : cette forme d'équilibrage de charge permet à un site web d'être distribué sur plusieurs serveurs dans le monde entier. Le proxy inverse redirigera alors les clients vers le serveur le plus proche géographiquement. Cette solution permet de réduire les distances que les requêtes et les réponses doivent parcourir, minimisant ainsi les temps de chargement.
+Mise en cache : un proxy inverse peut également mettre en cache le contenu afin d'améliorer la rapidité d'un site. Ainsi, un utilisateur à Paris visitant un site web associé à un proxy inverse (et disposant de serveurs web à Los Angeles) pourrait en fait se connecter à un serveur proxy inverse local à Paris, qui se chargera ensuite de communiquer avec un serveur d'origine à Los Angeles. Le serveur proxy pourra alors mettre en cache (ou enregistrer temporairement) les données de réponse. Les utilisateurs parisiens qui se rendront par la suite sur ce site obtiendront la version mise en cache localement en réponse du serveur de proxy inverse parisien, entraînant ainsi une expérience de navigation plus rapide.
+Chiffrement SSL : le chiffrement et le déchiffrement des communications SSL (ou TLS) de chaque client peuvent s'avérer coûteux en termes de calcul pour un serveur d'origine. Un proxy inverse peut ainsi être configuré pour déchiffrer toutes les requêtes entrantes et chiffrer l'ensemble des réponses sortantes, afin de libérer de précieuses ressources sur le serveur d'origine.
+

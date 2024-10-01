@@ -1,5 +1,8 @@
 FROM debian:buster
 
+ARG WP_PATH
+ARG WP_URL
+
 RUN apt update \
 && apt install -y nginx openssl \
 && mkdir -p /etc/nginx/ssl \
@@ -13,6 +16,6 @@ RUN mkdir -p /var/run/nginx
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx"]
 
 EXPOSE 443

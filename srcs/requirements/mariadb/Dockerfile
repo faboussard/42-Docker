@@ -1,5 +1,10 @@
 FROM debian:buster
 
+ARG SQL_DATABASE
+ARG SQL_USER
+ARG SQL_PASSWORD
+ARG SQL_ROOT_PASSWORD
+
 RUN apt update -y && \
     apt upgrade -y && \
     apt install mariadb-server -y
