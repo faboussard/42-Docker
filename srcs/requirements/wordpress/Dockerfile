@@ -3,7 +3,7 @@ FROM debian:bullseye
 RUN apt update -y && \
     apt upgrade -y && \
     apt install -y wget \
-      php7.3 \
+      php \
       php-fpm \
 	  php-mysql \
 	  mariadb-client && \
