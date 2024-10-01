@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye
 
 ARG SQL_DATABASE
 ARG SQL_USER
