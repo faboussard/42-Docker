@@ -1,22 +1,38 @@
+#wordpress
+
 FROM debian:bullseye
 
-RUN apt update -y && \
-    apt upgrade -y && \
-    apt install -y wget \
-      php \
-      php-fpm \
-	  php-mysql \
-	  mariadb-client && \
-    rm -rf /var/lib/apt/lists/*
+# Install necessary packages
+RUN apt-get update && apt-get -y install \
+    wget \
+    php \
+    php-mysql \
+    php-fpm \
+    mariadb-client \
+    php-redis \
+    tini
 
-COPY conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
+# Install WP-CLI
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
 
-RUN wget https://github.com/wp-cli/wp-cli-bundle/releases/download/v2.7.0/wp-cli-2.7.0.phar
-RUN chmod +x wp-cli-2.7.0.phar
-RUN mv wp-cli-2.7.0.phar /usr/local/bin/wp
+# Copy PHP configuration
+COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
 
-COPY tools/wordpress.sh /var/
+# Prepare PHP runtime directory
+RUN mkdir /run/php
+RUN chown -R www-data:www-data /run/php
 
-CMD ["bash", "/var/wordpress.sh"]
+# Copy the WordPress initialization script
+COPY ./tools/wordpress.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/wordpress.sh
 
-EXPOSE 9000
+# Set the working directory
+WORKDIR /var/www/html/
+
+# Use tini as the init system
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+# Set the default command
+CMD ["/usr/local/bin/wordpress.sh"]

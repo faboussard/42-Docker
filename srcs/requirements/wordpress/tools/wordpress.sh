@@ -1,3 +1,5 @@
+#!/bin/bash
+
 sleep 10
 # Install WP
 if [ ! -f "${WP_PATH}/wp-config.php" ]; then

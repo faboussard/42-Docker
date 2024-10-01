@@ -1,14 +1,47 @@
+///////////////////////////////////////////////////////////////////////
+BEST Practices
+
+//////////////////////////////////////////////////////////////////////
+
+PID 1 in Docker Containers
+In Docker containers, the first process started (PID 1) has special responsibilities:
+
+tini is a tiny but valid init system for Linux-based containers. It is designed to handle the responsibilities of PID 1 in a container, which include:
+
+Reaping Zombie Processes: When a process terminates, its parent process must read its exit status. If the parent process does not do this, the terminated process becomes a "zombie" and can consume system resources. tini ensures that all child processes are properly reaped.
+
+Forwarding Signals: Containers often need to handle system signals (e.g., SIGTERM, SIGINT) correctly to ensure graceful shutdowns. tini forwards these signals to the child processes, allowing them to handle the signals appropriately.
+
+It reaps zombie processes.
+It handles system signals.
+If the process running as PID 1 in a container does not handle these responsibilities correctly, it can lead to issues such as memory leaks and improper signal handling.
+
+Best Practices for Writing Dockerfiles
+Use Official Base Images: Start with a minimal and secure base image.
+
+Minimize Layers: Combine commands to reduce the number of layers.
+
+Use Multi-Stage Builds: Reduce the final image size by using multi-stage builds.
+
+Set a Non-Root User: Run your application as a non-root user for better security.
+
+Use ENTRYPOINT and CMD Correctly: Use ENTRYPOINT for the main command and CMD for default arguments.
+
+Handle PID 1 Correctly: Use an init system like tini to handle PID 1 responsibilities.
+
+Example Dockerfile for WordPress
+
 
 NGINX with TLSv1.2 or TLSv1.3 only =  config ssl(predecesseur de tsl) = > change les urls de http en https = securisation. 
 
 
 
 ///////////////////////////////////////////////////////////////////////
-
-verif docker evaluation
-
+AVANT EVALUATION
 
 //////////////////////////////////////////////////////////////////////
+
+- changer sur le port 443 (sudo ). jai mis 1080 pour linstant 
 
 Vérifier que quand tu stop tes docker et que tu les relances tes données sont toujours présentes 
 
