@@ -1,25 +1,16 @@
 FROM debian:bullseye
 
-ARG SQL_DATABASE
-ARG SQL_USER
-ARG SQL_PASSWORD
-ARG SQL_ROOT_PASSWORD
+RUN apt update -y \
+    && apt upgrade -y \
+    && apt install -y mariadb-server
 
-RUN apt update -y && \
-    apt upgrade -y && \
-    apt install mariadb-server -y
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
-COPY conf/50-server.cnf	/etc/mysql/mariadb.conf.d/50-server.cnf
 
-# Create database, new user and change root password
-RUN service mysql start && \
-    mysql -u root -e "CREATE DATABASE IF NOT EXISTS \$SQL_DATABASE; \
-    CREATE USER IF NOT EXISTS '\$SQL_USER'@'%' IDENTIFIED BY '\$SQL_PASSWORD'; \
-    GRANT ALL PRIVILEGES ON \$SQL_DATABASE.* TO '\$SQL_USER'@'%'; \
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '\$SQL_ROOT_PASSWORD'; \
-    FLUSH PRIVILEGES;" && \
-    mysqladmin -u root -p\$SQL_ROOT_PASSWORD shutdown
+COPY ./tools/db_init.sh .
 
-CMD ["mysqld_safe"]
+RUN chmod +x db_init.sh
+
+CMD ["bash", "db_init.sh"]
 
 EXPOSE 3306
