@@ -2,8 +2,12 @@
 
 sleep 10
 
-if [ ! -f ./wp-config.php ]; then
- wp core download --locale=en_GB --path=$WP_PATH --allow-root
+# Check if WordPress is already installed
+if ! $(wp core is-installed --path=$WP_PATH --allow-root); then
+  wp core download --locale=en_GB --path=$WP_PATH --allow-root
+
+  # Ensure the WordPress installation path is writable
+  chmod -R 755 $WP_PATH
 
   wp config create \
     --dbname=$SQL_DATABASE \
@@ -11,7 +15,8 @@ if [ ! -f ./wp-config.php ]; then
     --dbpass=$SQL_PASSWORD \
     --dbhost=mariadb \
     --path=$WP_PATH \
-    --allow-root
+    --allow-root \
+    --skip-check
 
   wp core install \
     --url=$WP_URL \
@@ -28,7 +33,6 @@ if [ ! -f ./wp-config.php ]; then
     --user_pass=$WP_PASS \
     --path=$WP_PATH \
     --allow-root
-
 fi
 
 exec "$@"
