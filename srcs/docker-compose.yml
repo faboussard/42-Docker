@@ -24,7 +24,7 @@ services:
     container_name: nginx
     image: nginx
     volumes:
-      - wordpress:$WP_PATH
+      - wordpress_data:$WP_PATH
     networks:
       - inception
     depends_on:
@@ -37,7 +37,7 @@ services:
         WP_URL: $WP_URL
     env_file: .env
     ports:
-      - "4000:4000"
+      - "343:343"
     restart: on-failure
 
   wordpress:
@@ -45,7 +45,7 @@ services:
     image: wordpress
     env_file: .env
     volumes:
-      - wordpress:$WP_PATH
+      - wordpress_data:$WP_PATH
     networks:
       - inception
     build:
@@ -62,8 +62,9 @@ networks:
     driver: bridge
 
 volumes:
-  wordpress:
+  wordpress_data:
     driver: local
+    name: wordpress_data
     driver_opts:
       type: 'none'
       o: 'bind'
