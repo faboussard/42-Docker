@@ -1,0 +1,28 @@
+# Ignorer les fichiers de configuration locaux
+.env
+*.local
+
+# Ignorer les fichiers de compilation
+*.o
+*.pyc
+*.pyo
+node_modules/
+vendor/
+
+# Ignorer les fichiers de versionnement
+.git/
+.gitignore
+
+# Ignorer les fichiers temporaires
+*.tmp
+*.bak
+*.swp
+*~
+
+# Ignorer les dossiers de tests et de documentation
+tests/
+docs/
+
+# Ignorer des fichiers spécifiques
+Dockerfile
+.DS_Store

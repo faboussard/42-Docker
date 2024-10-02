@@ -201,3 +201,54 @@ Un "processus" est une instance de PHP qui est prête à exécuter un script PHP
 Un "processus inactif" (idle process) est un processus qui n'est pas actuellement utilisé pour exécuter un script PHP. Il est "au repos", en attente d'une nouvelle demande.
 
 Les paramètres pm.min_spare_servers et pm.max_spare_servers dans le fichier de configuration de PHP-FPM déterminent le nombre minimum et maximum de processus inactifs que PHP-FPM maintiendra. Si le nombre de processus inactifs tombe en dessous de pm.min_spare_servers, PHP-FPM créera de nouveaux processus. Si le nombre de processus inactifs dépasse pm.max_spare_servers, PHP-FPM arrêtera les processus excédentaires. Cela permet de gérer efficacement les ressources du serveur.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+maria db - docker file
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Les variables définies avec ARG peuvent être utilisées dans les commandes RUN pour installer des logiciels ou effectuer d'autres actions durant la construction de l'image.
+Configuration de la base de données :
+
+Les variables d'environnement sont utilisées pour créer la base de données et l'utilisateur MySQL. Si l'une d'elles n'est pas définie, le script ne pourra pas fonctionner correctement, ce qui peut entraîner des erreurs lors de la configuration de la base de données.
+Sécurité :
+
+La vérification des variables d'environnement au début du script assure que le script ne s'exécute pas dans un état partiel ou incorrect, ce qui peut avoir des implications de sécurité, comme la création d'utilisateurs ou de bases de données sans mots de passe ou avec des mots de passe par défaut.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+maria db - script
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Résumé de l'ordre des opérations dans le script :
+Démarrer MySQL en mode sécurisé :
+
+bash
+Copy code
+mysqld_safe --skip-networking &
+Cela démarre MySQL en arrière-plan, avec l'option --skip-networking pour désactiver les connexions réseau, ce qui est utile pour l'initialisation sans risques de connexions extérieures.
+
+Attendre que MySQL soit prêt :
+
+bash
+Copy code
+until mysqladmin ping &>/dev/null; do
+    echo -n "."; sleep 1
+done
+Cette boucle attend que le serveur MySQL soit complètement opérationnel avant d'exécuter les commandes SQL.
+
+Exécuter les commandes SQL : Cela inclut la création de la base de données, la création de l'utilisateur et la définition des privilèges.
+
+Arrêter MySQL proprement :
+
+bash
+Copy code
+mysqladmin -u root -p${SQL_ROOT_PASSWORD} shutdown
+Cela garantit que MySQL est arrêté de manière ordonnée après la configuration.
+
+Redémarrer MySQL en avant-plan :
+
+bash
+Copy code
+exec mysqld_safe
+Cela démarre le serveur MySQL en avant-plan, ce qui est nécessaire pour que le conteneur Docker reste actif.
+
+En résumé, cette commande fait partie d'un processus d'initialisation où le serveur MySQL est temporairement démarré pour la configuration, puis arrêté avant d'être relancé correctement pour le fonctionnement normal dans le conteneur Docker.
