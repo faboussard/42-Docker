@@ -31,7 +31,7 @@ clean:
 
 .PHONY: fclean
 fclean: clean
-	rm -rf $(WORDPRESS_VOLUME_PATH) $(MARIADB_VOLUME_PATH)
+	sudo rm -rf $(WORDPRESS_VOLUME_PATH) $(MARIADB_VOLUME_PATH)
 
 .PHONY: re
 re: fclean

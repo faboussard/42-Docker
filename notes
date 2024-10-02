@@ -180,3 +180,24 @@ Protection contre les attaques : avec un proxy inverse en place, un site ou un s
 Mise en cache : un proxy inverse peut également mettre en cache le contenu afin d'améliorer la rapidité d'un site. Ainsi, un utilisateur à Paris visitant un site web associé à un proxy inverse (et disposant de serveurs web à Los Angeles) pourrait en fait se connecter à un serveur proxy inverse local à Paris, qui se chargera ensuite de communiquer avec un serveur d'origine à Los Angeles. Le serveur proxy pourra alors mettre en cache (ou enregistrer temporairement) les données de réponse. Les utilisateurs parisiens qui se rendront par la suite sur ce site obtiendront la version mise en cache localement en réponse du serveur de proxy inverse parisien, entraînant ainsi une expérience de navigation plus rapide.
 Chiffrement SSL : le chiffrement et le déchiffrement des communications SSL (ou TLS) de chaque client peuvent s'avérer coûteux en termes de calcul pour un serveur d'origine. Un proxy inverse peut ainsi être configuré pour déchiffrer toutes les requêtes entrantes et chiffrer l'ensemble des réponses sortantes, afin de libérer de précieuses ressources sur le serveur d'origine.
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+PHP
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+WordPress est une application web écrite en PHP. PHP est le langage de programmation qui fait fonctionner WordPress. Lorsque vous visitez un site WordPress, le serveur web (par exemple, Nginx ou Apache) passe la demande à PHP. PHP exécute alors le code WordPress, qui génère la page web à afficher.
+
+Sans PHP, WordPress ne pourrait pas fonctionner. C'est pourquoi vous devez avoir PHP installé et configuré sur votre serveur pour faire fonctionner WordPress. De plus, PHP doit être configuré pour pouvoir communiquer avec votre serveur web, ce qui est souvent réalisé en utilisant PHP-FPM.
+
+
+Une "pool" dans PHP-FPM est un ensemble de processus PHP qui sont prêts à répondre aux demandes. Chaque pool peut avoir sa propre configuration, ce qui permet de séparer les différentes applications PHP sur le même serveur. Par exemple, vous pouvez avoir une pool pour votre application WordPress et une autre pour une application Laravel, chacune avec sa propre configuration.
+
+Dans le contexte de PHP-FPM :
+
+Un "processus" est une instance de PHP qui est prête à exécuter un script PHP.
+
+"Forker" un processus signifie créer un nouveau processus en copiant le processus existant.
+
+Un "processus inactif" (idle process) est un processus qui n'est pas actuellement utilisé pour exécuter un script PHP. Il est "au repos", en attente d'une nouvelle demande.
+
+Les paramètres pm.min_spare_servers et pm.max_spare_servers dans le fichier de configuration de PHP-FPM déterminent le nombre minimum et maximum de processus inactifs que PHP-FPM maintiendra. Si le nombre de processus inactifs tombe en dessous de pm.min_spare_servers, PHP-FPM créera de nouveaux processus. Si le nombre de processus inactifs dépasse pm.max_spare_servers, PHP-FPM arrêtera les processus excédentaires. Cela permet de gérer efficacement les ressources du serveur.

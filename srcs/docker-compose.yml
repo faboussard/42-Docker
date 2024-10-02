@@ -8,9 +8,14 @@ services:
     build:
       context: requirements/mariadb
       dockerfile: Dockerfile
-    env_file: .env
+      args:
+        SQL_DATABASE: $SQL_DATABASE
+        SQL_USER: $SQL_USER
+        SQL_PASSWORD: $SQL_PASSWORD
+        SQL_ROOT_PASSWORD: $SQL_ROOT_PASSWORD
     volumes:
       - mariadb:/var/lib/mysql
+    env_file: .env
     restart: unless-stopped
     expose:
       - "3306"
