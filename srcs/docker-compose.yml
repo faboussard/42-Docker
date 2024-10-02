@@ -37,7 +37,7 @@ services:
         WP_URL: $WP_URL
     env_file: .env
     ports:
-      - "1080:1080"
+      - "4000:4000"
     restart: on-failure
 
   wordpress:

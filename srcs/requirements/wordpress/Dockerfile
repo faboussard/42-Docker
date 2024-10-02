@@ -1,28 +1,31 @@
-#wordpress
+FROM debian:buster
 
-FROM debian:bullseye
+# Mise à jour des paquets et installation des dépendances
+RUN apt update -y && \
+    apt upgrade -y && \
+    apt install -y wget \
+      php7.3 \
+      php7.3-fpm \
+	  php7.3-mysql \
+	  mariadb-client && \
+    rm -rf /var/lib/apt/lists/*
 
+# Changer la configuration PHP-FPM
+COPY conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 
-RUN apt-get update && apt-get -y install \
-	wget \
-    php \
-	php-mysql \
-	php-fpm \
-    mariadb-client
+# Télécharger et installer WP-CLI (version stable)
+RUN wget https://github.com/wp-cli/wp-cli-bundle/releases/download/v2.7.0/wp-cli-2.7.0.phar
+RUN chmod +x wp-cli-2.7.0.phar
+RUN mv wp-cli-2.7.0.phar /usr/local/bin/wp
 
-RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN chmod +x wp-cli.phar
-RUN mv wp-cli.phar /usr/local/bin/wp
+# Copier le script d'initialisation de WordPress
+COPY tools/wordpress.sh /var/wordpress.sh
 
-COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
+# S'assurer que le script a les bonnes permissions
+RUN chmod +x /var/wordpress.sh
 
-RUN mkdir /run/php
-RUN chown -R www-data:www-data /run/php
-COPY ./tools/wordpress.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/wordpress.sh
+# Commande par défaut pour lancer le script d'initialisation
+CMD ["bash", "/var/wordpress.sh"]
 
-WORKDIR $WP_PATH
-
-ENTRYPOINT ["/usr/local/bin/wordpress.sh"]
-
-CMD ["/usr/sbin/php-fpm7.3", "-F"]
+# Exposer le port pour PHP-FPM
+EXPOSE 9000
