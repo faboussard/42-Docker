@@ -1,13 +1,11 @@
 #!/bin/bash
 
-# Check if required environment variables are set
 if [ -z "$SQL_DATABASE" ] || [ -z "$SQL_USER" ] || [ -z "$SQL_PASSWORD" ] || [ -z "$SQL_ROOT_PASSWORD" ]; then
   echo "One or more required environment variables are not set."
   echo "Please set SQL_DATABASE, SQL_USER, SQL_PASSWORD, and SQL_ROOT_PASSWORD."
   exit 1
 fi
 
-# Start the MySQL daemon in the background
 mysqld_safe --skip-networking &
 
 until mysqladmin ping &>/dev/null; do
