@@ -70,6 +70,7 @@ volumes:
       o: 'bind'
       device: $WORDPRESS_VOLUME_PATH
   mariadb:
+    name: mariadb_data
     driver: local
     driver_opts:
       type: 'none'
