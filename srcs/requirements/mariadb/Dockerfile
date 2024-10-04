@@ -18,6 +18,6 @@ RUN chmod +x /usr/local/bin/db_init.sh
 
 ENTRYPOINT ["db_init.sh"]
 
-CMD ["mysqld", "--bind-address=0.0.0.0"]
+CMD ["mysqld_safe", "--bind-address=0.0.0.0"]
 
 EXPOSE 3306
