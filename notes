@@ -385,3 +385,22 @@ Summary
     VMs provide stronger isolation and are suitable for running applications that require distinct operating systems or legacy applications that cannot be containerized.
 
 Choosing between Docker and VMs often depends on specific use cases, resource constraints, and operational requirements.
+
+
+Davina est une collègue extrêmement agréable avec tout le monde, disponible, claire et précise dans tout ce qu'elle entreprend. Davina a un réel esprit d'équipe et fera tout pour le bien de son équipe et de son entreprise. Elle a aussi une vision d'ensemble et de diplomatie qui peuvent démêler des situations compliquées. C'était un immense plaisir de l'avoir comme collègue à la Savonnerie du Midi !
+
+
+
+PORT MARIADB
+  main U:2  ~/docker                                                                                                                                                                          20:51:13  fanny 
+ 1 ❯ docker inspect   -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mariadb
+
+mysql --host=172.18.0.2 --port="3306" -u root -p
+
+In MariaDB container :
+
+mysql -u <username> -p : Will connect you to the database and prompt you with the user password, you can use the root one as well as the db_user one, both must have a password.
+SHOW DATABASE; : will list all available databases, should be two, the default one and yours that should be named by your dockerfile commands.
+USE <db_name>; : Gives you access to the named database, Terminal prompt should look like MariaDB [db_name].
+SHOW TABLES; : Display a list of tables currently available in the current db.
+SELECT * FROM <table_name>; : Should display the whole content defined by * of the selected table from the list given by SHOW TABLES;, wp_users should as example display admin and users currently registered to wordpress linked to the database.

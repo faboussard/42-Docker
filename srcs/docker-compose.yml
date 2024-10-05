@@ -18,7 +18,7 @@ services:
     env_file: .env
     restart: unless-stopped
     expose:
-      - "3306"
+      - 3306
 
   nginx:
     container_name: nginx

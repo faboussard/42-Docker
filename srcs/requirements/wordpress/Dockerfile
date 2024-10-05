@@ -8,6 +8,8 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
 
+# : Vous changez la propriété de tous les fichiers et répertoires sous /var/www/ 
+#pour qu'ils appartiennent à l'utilisateur www-data et au groupe www-data.
 RUN mkdir -p /run/php/ /var/www/html \
     && chown -R www-data:www-data /var/www/*
 
