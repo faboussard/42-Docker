@@ -303,7 +303,7 @@ Using Docker Images With Docker Compose
         ports:
           - "80:80"
       db:
-        image: postgres
+        image: f
         environment:
           POSTGRES_DB: mydb
 
@@ -385,10 +385,6 @@ Summary
     VMs provide stronger isolation and are suitable for running applications that require distinct operating systems or legacy applications that cannot be containerized.
 
 Choosing between Docker and VMs often depends on specific use cases, resource constraints, and operational requirements.
-
-
-Davina est une collègue extrêmement agréable avec tout le monde, disponible, claire et précise dans tout ce qu'elle entreprend. Davina a un réel esprit d'équipe et fera tout pour le bien de son équipe et de son entreprise. Elle a aussi une vision d'ensemble et de diplomatie qui peuvent démêler des situations compliquées. C'était un immense plaisir de l'avoir comme collègue à la Savonnerie du Midi !
-
 
 
 PORT MARIADB
